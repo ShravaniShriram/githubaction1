@@ -1,0 +1,24 @@
+name: Docker CI Learning - githubaction
+on:
+  push:
+jobs:
+  docker_1:
+    name: k8s deployment
+    runs-on: self-hosted
+      #labels: kucl22 
+    steps:
+      - name: create wordpress deployment
+        run: kubectl create deployment wordpress --image=docker.io/wordpress --dry-run=client -o yaml > wp.yml
+        
+      - name: create mysql deployment 
+        run: kubectl create deployment mysql --image=docker.io/mysql:5.6 --dry-run=client -o yaml > mysql.yml
+
+      - name: apply mysql deployment
+        run: kubectl apply -f mysql.yml
+
+      - name: apply wordpress deployment
+        run: kubectl apply -f wp.yml
+
+      - name: expose deployment 
+        run: kubectl expose deployment --port 
+        
